@@ -260,7 +260,7 @@ function conf(){
 		connection.send("captcha;id;"+get_cookie("capid")+";"+a);
 	}
 }
-let a = 0;
+var a = 0;
 function upd(){
 	if(a==0){
 		a=1;
