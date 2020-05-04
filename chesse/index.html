@@ -1,0 +1,438 @@
+
+<html>
+<head><title>Chess Online</title>
+    <meta charset="UTF-8">
+     
+        
+     <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    
+   
+    <body>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />
+<script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+! function(a) {
+    function f(a, b) {
+        if (!(a.originalEvent.touches.length > 1)) {
+            a.preventDefault();
+            var c = a.originalEvent.changedTouches[0],
+                d = document.createEvent("MouseEvents");
+            d.initMouseEvent(b, !0, !0, window, 1, c.screenX, c.screenY, c.clientX, c.clientY, !1, !1, !1, !1, 0, null), a.target.dispatchEvent(d)
+        }
+    }
+    if (a.support.touch = "ontouchend" in document, a.support.touch) {
+        var e, b = a.ui.mouse.prototype,
+            c = b._mouseInit,
+            d = b._mouseDestroy;
+        b._touchStart = function(a) {
+            var b = this;
+            !e && b._mouseCapture(a.originalEvent.changedTouches[0]) && (e = !0, b._touchMoved = !1, f(a, "mouseover"), f(a, "mousemove"), f(a, "mousedown"))
+        }, b._touchMove = function(a) {
+            e && (this._touchMoved = !0, f(a, "mousemove"))
+        }, b._touchEnd = function(a) {
+            e && (f(a, "mouseup"), f(a, "mouseout"), this._touchMoved || f(a, "click"), e = !1)
+        }, b._mouseInit = function() {
+            var b = this;
+            b.element.bind({
+                touchstart: a.proxy(b, "_touchStart"),
+                touchmove: a.proxy(b, "_touchMove"),
+                touchend: a.proxy(b, "_touchEnd")
+            }), c.call(b)
+        }, b._mouseDestroy = function() {
+            var b = this;
+            b.element.unbind({
+                touchstart: a.proxy(b, "_touchStart"),
+                touchmove: a.proxy(b, "_touchMove"),
+                touchend: a.proxy(b, "_touchEnd")
+            }), d.call(b)
+        }
+    }
+}(jQuery);    
+</script>
+       
+        <script src = "main-game.js"></script>
+        
+<script>
+/*    
+var boardi = '  <div id ="sid" onClick="onShow(this)" style="float:left;display:flex;" class="boardList"><div> </div><div style="width:10%;margint-top:20%;"><img src="https://kintellhome.com/wp-content/uploads/2018/10/noun_Gambling-Chip_589745_000000.png" width="100%"></div><div style="font-size:60;">stavka    numberpeop.</div><div style="font-size:80;margin-left:30%;">long min.</div></div>';
+//var divFigure = '<div id="f$coord" class = "figure">$figure</div>';
+//var connection = new WebSocket('ws://192.168.1.104:4444');
+function initBoardLists(cool,number,stavcka,time){
+       $('body').append(boardi.replace('sid',cool)
+                       .replace('stavka',stavcka)
+                        .replace('number',number)
+                       .replace('long',time/60000));
+       
+   
+}
+   
+   /* var str = '<div id="joined" value="cid" class="join"  onClick="joined(this)">join table</div>';
+    function onShow(e){
+     //   var c = document.getElementById(e.id+"").style="background-color:grey;";
+     var b=   document.getElementsByClassName("join")[0];
+        if(b!= null)
+            b.remove();
+         $('.panel').append(str.replace('joined',e.id));
+       
+    }
+    function joined(e){
+   // alert(e.id);
+        connection.send("table;game;join;"+e.id);
+    }
+/*connection.onopen = function (e) {
+    console.log('Connected! '+e);
+   // connection.send('rnbqkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR'); 
+     
+    // Send the message 'Ping' to the server
+};
+
+// Log errors
+connection.onerror = function (error) {
+    console.log('WebSocket Error ' + error);
+};
+
+
+    function create(){
+        connection.send("tables;create;test;200;")
+    }
+    /*
+// Log messages from the server
+connection.onmessage = function (e) {
+    var b = e.data.split(";");
+    if(b[0] == "tables"){
+        if(b[3-2]=="all"){
+           initBoardLists(b[2],b[6],b[5],b[7]);  
+        } if(b[3-2]=="remove"){
+            document.getElementById(""+b[2]).remove();
+        }
+  
+    }
+    console.log('Server: ' + e.data);
+    
+};        
+  */ 
+</script>
+	
+        
+        
+        <style>
+        
+			.enemy{
+				display:flex; position: absolute;top: 1%;left: 2%;float: left;border: 4px solid #55cdef;border-radius: 20px;
+				width: 65%;
+			} 
+a{
+  color: #fff;
+    font-size: 100%;
+ }
+a:hover{
+ text-decoration: none;
+}
+.container{
+ width:92%;
+ background-color: rgba(24, 33, 52, 0.7);
+ margin: 10px auto 0 auto;
+ text-align: center;
+    border-radius: 20px 20px 20px 20px;
+ box-shadow: 0 -5px 0 #3adbfd;
+ padding-bottom: 0px;
+}
+.container .tes{
+ width:60px;
+ height:60px;
+ margin: -30px 0 30px 0;
+ border: 5px solid #1a394f;
+ border-radius: 50%;
+ box-shadow: 0 -5px 0 #3adbfd;
+}
+            
+            
+            .container .ter{
+ width:240px;
+ height:120px;
+ margin: -60px 0 30px 0;
+             
+ border: 5px solid #1a394f;
+ border-radius: 50%;
+ box-shadow: 0 -5px 0 #3adbfd;
+}
+
+input[type="text"],input[type="password"]{
+ width: 90%;
+ height:40px;
+  border-radius: 20px 20px 20px 20px;    
+ font-size: 100%;
+ margin-bottom: 15px;
+ border-radius: 4px;
+ padding-left: 40px;
+}
+.dws-input input:hover{
+ box-shadow: 0 0 6px 3px rgba(58, 219, 253, 0.35);
+}
+.dws-submit {
+	
+ padding: 7px 20px;
+ margin: 5px 0 20px 0;
+ font-size: 150%;
+ color: #fff;
+ background-color: #2ca8c6;
+ border: none;
+    border-radius: 9px 9px 9px 9px;
+ border-bottom: 4px solid #6ee9fd;
+ cursor: pointer;
+}
+			
+			.dws-submits {
+	
+ padding: 2% 4%;
+ margin: 5px 0 20px 0;
+position: fixed;
+right:6px;
+top:0.16%;
+ font-size: 113%;
+ color: #fff;
+ background-color: #2ca8c6;
+ border: none;
+    border-radius: 9px 14px 9px 9px;
+ border-bottom: 4px solid #6ee9fd;
+ cursor: pointer;
+}
+			.dws-submitready {
+			
+	position:relative;		
+ padding: 2% 4%;
+top: 5%;
+ font-size: 150%;
+ color: #fff;
+ background-color: #2ca8c6;
+ border: none;
+    border-radius: 9px 9px 9px 9px;
+ border-bottom: 4px solid #6ee9fd;
+ cursor: pointer;
+}
+.dws-submit:hover{
+ transition: all 0.5s;
+ background: #fff;
+ color: #2c536c;
+}
+#timer{
+	position: absolute;
+bottom: 10px;
+text-align: center;
+color: #333;
+	color: red;
+	font-weight: bolder;
+font-family: fantasy;
+font-size: 65%;
+cursor: default;
+}
+
+#timer div{
+display: inline;
+}
+			
+			#timerGameEnemy{
+	position: relative;
+margin-top:20%;
+text-align: center;
+color: #333;
+	color: red;
+	font-weight: bolder;
+font-family: fantasy;
+font-size: 65%;
+cursor: default;
+}
+
+#timerGameEnemy div{
+display: inline;
+}
+			
+			
+			
+						#timerGameMy{
+	position: relative;
+margin-top: 20%;
+text-align: center;
+color: #333;
+	color: red;
+	font-weight: bolder;
+font-family: fantasy;
+font-size: 65%;
+cursor: default;
+}
+						#status{
+	position: relative;
+margin-top: 20%;
+text-align: center;
+color: #333;
+	color: red;
+	font-weight: bolder;
+font-family: fantasy;
+font-size: 65%;
+cursor: default;
+}
+
+			
+#timerGameMy div{
+display: inline;
+}
+.dws-input::before{
+ font-family: "FontAwesome";
+ content: "\f007";
+ position: absolute;
+ font-size: 100%;
+ padding: 3% 0 0 7px;
+ color: #2c536c;
+}
+.dws-input:nth-child(2)::before{
+content: "\f023";
+    
+}
+.dws-input:hover::before{
+ color: #319ebc;
+ transition: all 0.3s;
+}
+.dws-social i{
+ color: #fff;
+ font-size: 20px;
+ width: 20px;
+ padding: 10px;
+}
+.dws-social i:hover{
+ background-color: #fff;
+ color: #1a394f;
+ border-radius: 5px;
+ cursor: pointer;
+}
+        </style>
+        
+         <div id="boardlistview" style="display: none;display: none;" >
+             
+                <div style="position:fixed;width: 100%;height:12%;border-radius: 0px 0px 20px 20px;top:0px;left:0px;background-color: #55b3ce;"><dt><dd style="font-size:100%;"><img  class="ter" src="https://dwstroy.ru/lessons/les3373/demo/img/men.png" style="margin-top:2%;margin-left: auto;" width="15%"><a id="Nickname">Nickname </a><a id="money"> 2000$</a>
+    </div>
+   <center><h1  style="font-size:150%;margin-bottom: 0px;align-items: center;"> Список столов </h1></center>
+        <div class="panel" ><div class="createtable" style="display: flex;align-items: center;" onClick="create()" >Создать стол</div>
+         <div class="view" style="display: none;align-items: center;" >Смотреть</div>   
+                </div>    
+        
+        </div>
+        
+        
+        <div id="auth">
+        <div class="container" >
+    <img  class="tes" src="https://dwstroy.ru/lessons/les3373/demo/img/men.png">
+            <br/>
+            <a href="#"> #ЛУЧШЕДОМА</a>
+            <br/>
+            <div class="dws-input">
+        
+            <input type="text" id="user" name="username"  placeholder="логин">
+        </div>
+        <div class="dws-input">
+            <input type="password" id="pass" name="password"  placeholder="Пароль">
+        </div>
+            <button class="dws-submit"  onClick="auth(this); return false;" >Войти</button><br />
+        <a href="#" onClick="upd()">Зарегестрироваться</a>
+   
+            <br/>
+            2020&copy;
+</div>
+       
+      
+        </div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		 <div id="reg" style="display:none;">
+        <div class="container" >
+    <img  class="tes" src="https://dwstroy.ru/lessons/les3373/demo/img/men.png">
+            <br/>
+            <a href="#"> #ЛУЧШЕДОМА</a>
+            <br/>
+            <div class="dws-input">
+        
+            <input type="text" id="reguser" name="username"  placeholder="Придумайте логин">
+        </div>
+        <div class="dws-input">
+            <input type="password" id="regpass" name="password"  placeholder="Придумайте пароль">
+        </div>
+            <button class="dws-submit"  onClick="reg(); return false;" >Регистрация</button><br />
+        <a href="#" onClick="upd()">Войти</a>
+   
+  
+            <br/>
+               2020&copy;
+</div>
+       
+      
+        </div>
+     
+		
+		
+		
+		
+		
+			 <div id="captcha" style="display:none;">
+        <div class="container" >
+    <img  class="tes" src="https://dwstroy.ru/lessons/les3373/demo/img/men.png">
+            <br/>
+            <a href="#"> #ЛУЧШЕДОМА</a>
+            <br/>
+            <div class="dws-input">
+        
+            <input type="number" id="cap" name="username"  placeholder="Введите сумму">
+				<br>
+				<div id="imgcap"></div>
+        </div>
+       
+            <button class="dws-submit"  onClick="conf(); return false;" >Ввести</button><br />
+       
+   
+
+            <br/>
+            
+</div>
+       
+      
+        </div>
+     
+           
+     <div class = "board" id = "boardid" style="display:none;">
+       
+    </div>
+        <div id="exit"style="display:none;">
+         <div class ="enemy" style=""><div style='width: 30%;height: 99%;margin-left: 2%;margin-top: 2%;'><img  class='tes' style='border: 3px solid  #55cdef;border-radius: 50%;margin-bottom: 6%;' src="https://dwstroy.ru/lessons/les3373/demo/img/men.png" width = "95%">
+             </div><div id="EnemyPanel" style='font-size: 150%;margin-top: 8%;margin-left: 5%;'><dt></dt></div>
+</div>     
+			<div id="timer" >
+		
+		Если вы не будете готовы,то ваш сеанс закончится течение <div id="second">19</div> секунд...
+	</div>
+			<div id = "GameMassage" style="display:none;">Игра началась.</div>
+				<div id="status" ></div>
+			<div id="timerGameEnemy">
+				Ход соперника: <div id="times">60</div>сек.
+			</div>
+			
+			<div id="timerGameMy" style="display:none;">
+			Ваш ход: <div id="times1">60</div>сек.</div>
+			<button  class="dws-submits" onClick="exit(this); return true;">Выйти</button>
+        </div>
+   <center><button  style="display:none;" id = "board" class="dws-submitready" onClick="done(this); return true;">Готов.</button></center>
+		<div id="lastmove">&#13;</div>
+    </body>
+</html>

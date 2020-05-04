@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>Chess</title>
+    <style>
+	
+.board{
+	
+    width: 640px;
+    height:  640px;
+      border: 10px solid #55cdef;
+    border-radius: 10px 10px 10px 10px;
+	
+}
+body{
+
+    margin-left: 3px;
+    margin-top: 3px;
+}
+.block{
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        width: 80px;
+    height:80px;
+    
+    }
+.black{
+    background-color: #999;
+}
+.white{
+    background-color: #eee;
+}
+.figure{
+    font-size: 60px;
+    cursor:pointer;
+}
+	</style>
+</head>
+<body>
+<script>
+	</script>
+<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+! function(a) {
+    function f(a, b) {
+        if (!(a.originalEvent.touches.length > 1)) {
+            a.preventDefault();
+            var c = a.originalEvent.changedTouches[0],
+                d = document.createEvent("MouseEvents");
+            d.initMouseEvent(b, !0, !0, window, 1, c.screenX, c.screenY, c.clientX, c.clientY, !1, !1, !1, !1, 0, null), a.target.dispatchEvent(d)
+        }
+    }
+    if (a.support.touch = "ontouchend" in document, a.support.touch) {
+        var e, b = a.ui.mouse.prototype,
+            c = b._mouseInit,
+            d = b._mouseDestroy;
+        b._touchStart = function(a) {
+            var b = this;
+            !e && b._mouseCapture(a.originalEvent.changedTouches[0]) && (e = !0, b._touchMoved = !1, f(a, "mouseover"), f(a, "mousemove"), f(a, "mousedown"))
+        }, b._touchMove = function(a) {
+            e && (this._touchMoved = !0, f(a, "mousemove"))
+        }, b._touchEnd = function(a) {
+            e && (f(a, "mouseup"), f(a, "mouseout"), this._touchMoved || f(a, "click"), e = !1)
+        }, b._mouseInit = function() {
+            var b = this;
+            b.element.bind({
+                touchstart: a.proxy(b, "_touchStart"),
+                touchmove: a.proxy(b, "_touchMove"),
+                touchend: a.proxy(b, "_touchEnd")
+            }), c.call(b)
+        }, b._mouseDestroy = function() {
+            var b = this;
+            b.element.unbind({
+                touchstart: a.proxy(b, "_touchStart"),
+                touchmove: a.proxy(b, "_touchMove"),
+                touchend: a.proxy(b, "_touchEnd")
+            }), d.call(b)
+        }
+    }
+}(jQuery);
+	
+	
+
+var divBlock = '<div id = "s$coord" class = "block $color"></div>';
+var divFigure = '<div id="f$coord" class = "figure">$figure</div>';
+var map;
+	//это он тип получает строку адресную из браузера и вынеает пet pапросы к примеру ?boards=1 при использывании get['boards'] выведется цифра 1
+var get = window
+    .location
+    .search
+    .replace('?','')//удаляем всю строку до вопросительного знака
+    .split('&')//разделяем на массив от этого знака & все слова и до следуещего такого же
+    .reduce(
+        function(p,e){
+            var a = e.split('=');
+            p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+$(function(){
+    map = new Array();
+  // initBoard();
+   // showFigureAt(0,'R');
+//    showFigureAt(63,'r');
+    showFigure('rnbUkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR');
+	//переделанный fen код шахмат в 64 фимволную строку ,она нужна для воспроизведения шахмат 1 это пустое поле 
+    Move();
+   // stop(); функция моve позваляет двигать фигуры средствами ui
+});
+/*
+var connection = new WebSocket('ws://192.168.1.104:4444');
+
+connection.onopen = function (e) {
+    console.log('Connected! '+e);
+   // connection.send('rnbqkbnrpppppppp11111111111111111111111111111111PPPPPPPPRNBQKBNR'); 
+     
+    // Send the message 'Ping' to the server
+};
+
+// Log errors
+connection.onerror = function (error) {
+    console.log('WebSocket Error ' + error);
+};
+
+// Log messages from the server
+connection.onmessage = function (e) {
+    var b = e.data.split(";");
+    if(b[0] == "board"){
+        if(b[3-2]=="move"){
+              showFigure(''+b[2]);
+    Move();
+        }
+  
+    }
+    console.log('Server: ' + e.data);
+    
+};
+*/
+function initBoard(){
+    for(var coord=0;coord<64;coord++){
+       $('.board').append(divBlock
+                          .replace('$coord',coord)
+                          .replace('$color',isBlack(coord)?'black':'white'));
+       
+   }
+    
+}
+function moveFigure(frcoord,tocoord){
+   
+    console.log("move from " +frcoord +"to "+tocoord);
+ figure = map[frcoord];
+    showFigureAt(frcoord,'1');
+    showFigureAt(tocoord,figure);
+Move();
+    if(get['board']>=0)
+       connection.send("tabless;"+get['board']+";table;move;0;"+frcoord +";"+tocoord); 
+   
+}
+function Move(){
+    $('.figure').draggable();
+    
+}
+function stop(){
+    $('.block').droppable({
+        drop:function(event,ui){
+           
+            var frcoord =ui.draggable.attr("id").substring(3-2);
+            var tocoord = this.id.substring(3-2);
+             moveFigure(frcoord,tocoord);
+        }
+    });
+}
+function showFigure(figures){
+    for(var coord=0;coord<64;coord++){
+    showFigureAt(coord,figures.charAt(coord));
+    }
+}
+function getChessSymbol(figure){
+    switch(figure){
+             case 'K':return '&#9812;';
+             case 'Q':return '&#9813;';
+             case 'R':return '&#9814;';
+             case 'B':return '&#9815;';
+             case 'N':return '&#9816;';
+             case 'P':return '&#9817;';
+             case 'k':return '&#9818;';
+             case 'U':return '&#9819;';
+             case 'r':return '&#9820;';
+             case 'b':return '&#9821;';
+             case 'n':return '&#9822;';
+             case 'p':return '&#9823;';        default:return '';
+    }
+}
+function showFigureAt(coord,figure){
+    map[coord] = figure;
+    $('#s'+coord).html(divFigure
+                      .replace('$coord',coord)
+                      .replace('$figure',getChessSymbol(figure)));
+    stop();
+}
+function isBlack(coord){
+    return (coord % 8 + Math.floor(coord/8))%2;//математическая фунция для определения черной клетки и новой строки
+}
+	
+
+</script>
+	
+	
+    
+	
+</body>
+</html>
